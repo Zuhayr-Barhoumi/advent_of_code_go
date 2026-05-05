@@ -1,0 +1,7 @@
+
+# Binaries
+*.exe
+*.out
+
+# Input files (optional — AoC asks you not to share inputs publicly)
+**/input.txt
