@@ -23,10 +23,9 @@ func solve(input string) int {
 	for _, char := range s {
 		if char == '(' {
 			n++
-		} else {
+		} else if char == ')' {
 			n--
 		}
 	}
-
 	return n
 }
