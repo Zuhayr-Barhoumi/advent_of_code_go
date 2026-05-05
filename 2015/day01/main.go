@@ -26,7 +26,6 @@ func solve(input string) int {
 		} else {
 			n--
 		}
-		fmt.Printf("Rune: %c\n", char)
 	}
 
 	return n
