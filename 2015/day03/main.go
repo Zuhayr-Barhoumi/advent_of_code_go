@@ -21,8 +21,8 @@ func NewGrid[T any]() *Grid[T] {
 }
 
 // Set: Stores a value at x, y
-func (g *Grid[T]) Set(x, y int, value T) {
-	g.cells[House{X: x, Y: y}] = value
+func (g *Grid[T]) Set(x, y int, gifts T) {
+	g.cells[House{X: x, Y: y}] = gifts
 }
 
 // Get: Retrievs a value at x, y
@@ -37,9 +37,10 @@ func (g *Grid[T]) Len() int {
 	return len(g.cells)
 }
 
-func markHouse(location House, grid Grid[int]) {
-	if val, ok := grid.Get(location.X, location.Y); ok {
-		val++
+// markHouse increments the present count for the given house
+func markHouse(location House, grid *Grid[int]) {
+	if gifts, ok := grid.Get(location.X, location.Y); ok {
+		grid.Set(location.X, location.Y, gifts+1)
 	} else {
 		grid.Set(location.X, location.Y, 1)
 	}
@@ -51,36 +52,39 @@ func main() {
 		fmt.Println("Error reading file:", err)
 		return
 	}
+
+	if string(data) == "" {
+		fmt.Println("Empty file")
+		return
+	}
+	moves := strings.Split(strings.TrimSpace(string(data)), "")
+
 	location := House{X: 0, Y: 0}
 	grid := NewGrid[int]()
 
-	// Set the initial house as visited once
+	// Set the initial house gifts to 1
 	grid.Set(location.X, location.Y, 1)
 
-	moves := strings.Split(strings.TrimSpace(string(data)), "")
 	for _, char := range moves {
 		switch char {
 		case "^":
-			fmt.Printf("%s: Up\n", char)
 			location.Y++
-			markHouse(location, *grid)
+			markHouse(location, grid)
 		case ">":
-			fmt.Printf("%s: Right\n", char)
 			location.X++
-			markHouse(location, *grid)
+			markHouse(location, grid)
 		case "<":
-			fmt.Printf("%s: Left\n", char)
 			location.X--
-			markHouse(location, *grid)
+			markHouse(location, grid)
 		case "v":
-			fmt.Printf("%s: Down\n", char)
 			location.Y--
-			markHouse(location, *grid)
-		default:
-			fmt.Printf("%s: Other\n", char)
+			markHouse(location, grid)
 		}
 	}
 	numberOfHousesVisited := grid.Len()
 	fmt.Printf("Number of houses that received at least one gift: %d \n", numberOfHousesVisited)
 	// 2572
+	// for house, val := range grid.cells {
+	// 	fmt.Printf(" —— House: %d, %d —— Gifts: %d\n", house.X, house.Y, val)
+	// }
 }
