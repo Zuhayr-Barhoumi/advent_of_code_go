@@ -59,6 +59,7 @@ func main() {
 	}
 	moves := strings.Split(strings.TrimSpace(string(data)), "")
 
-	fmt.Printf("Number of houses that received at least one gift: %d \n", part1(moves))
+	fmt.Printf("Part 1 - Number of houses that received at least one gift: %d \n", part1(moves))
+	fmt.Printf("Part 2 - Number of houses that received at least one gift: %d \n", part2(moves))
 
 }
