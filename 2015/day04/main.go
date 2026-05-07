@@ -19,7 +19,7 @@ func findTargetHashPrefix(target string) string {
 
 		fullHash := hex.EncodeToString(hashBytes[:])
 
-		fmt.Printf("—— Input: %s —— MD5 Hash: %s \n", combo, fullHash)
+		// fmt.Printf("—— Input: %s —— MD5 Hash: %s \n", combo, fullHash)
 
 		if strings.HasPrefix(fullHash, target) {
 			return lowest_n_string
