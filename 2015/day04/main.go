@@ -8,11 +8,9 @@ import (
 	"strings"
 )
 
-func main() {
+func findTargetHashPrefix(target string) string {
 	secretKey := "ckczppom"
 	lowestN := 0
-	target := "00000"
-
 	for {
 		lowest_n_string := strconv.Itoa((lowestN))
 		combo := secretKey + lowest_n_string
@@ -24,10 +22,20 @@ func main() {
 		fmt.Printf("—— Input: %s —— MD5 Hash: %s \n", combo, fullHash)
 
 		if strings.HasPrefix(fullHash, target) {
-			fmt.Printf("Found Lowest Number to 5 Zeros: %s\n", lowest_n_string)
-			break
+			return lowest_n_string
 		} else {
 			lowestN += 1
 		}
 	}
+}
+
+func main() {
+	target1 := "00000"
+	target2 := "000000"
+
+	part1Solution := findTargetHashPrefix(target1)
+	part2Solution := findTargetHashPrefix(target2)
+
+	fmt.Printf("Part-1: Found Lowest Number to 5 Zeros: %s\n", part1Solution)
+	fmt.Printf("Part-2: Found Lowest Number to 5 Zeros: %s\n", part2Solution)
 }
