@@ -9,13 +9,13 @@ import (
 )
 
 func main() {
-	secret_key := "ckczppom"
-	lowest_n := 0
+	secretKey := "ckczppom"
+	lowestN := 0
 	target := "00000"
 
 	for {
-		lowest_n_string := strconv.Itoa((lowest_n))
-		combo := secret_key + lowest_n_string
+		lowest_n_string := strconv.Itoa((lowestN))
+		combo := secretKey + lowest_n_string
 
 		hashBytes := md5.Sum([]byte(combo)) // returns an array [16]byte
 
@@ -27,7 +27,7 @@ func main() {
 			fmt.Printf("Found Lowest Number to 5 Zeros: %s\n", lowest_n_string)
 			break
 		} else {
-			lowest_n += 1
+			lowestN += 1
 		}
 	}
 }
