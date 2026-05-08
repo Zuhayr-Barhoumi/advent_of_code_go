@@ -1,77 +1,49 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
 )
 
-func hasForbiddenPair(line string) bool {
-	forbiddenPairs := []string{"ab", "cd", "pq", "xy"}
-	for _, pair := range forbiddenPairs {
-		if strings.Contains(line, pair) {
+func isNice(s string) bool {
+	for _, pair := range []string{"ab", "cd", "pq", "xy"} {
+		if strings.Contains(s, pair) {
+			return false
+		}
+	}
+
+	vowels := 0
+	for _, c := range s {
+		if strings.ContainsRune("aeiou", c) {
+			vowels++
+		}
+	}
+	if vowels < 3 {
+		return false
+	}
+
+	for i := 0; i < len(s)-1; i++ {
+		if s[i] == s[i+1] {
 			return true
 		}
 	}
 	return false
-}
-
-func hasDoubled(line string) bool {
-	for i := 0; i < len(line)-1; i++ {
-		if line[i] == line[i+1] {
-			return true
-		}
-	}
-	return false
-}
-
-func containsVowels(line string) bool {
-	count := 0
-	for _, char := range line {
-		if strings.ContainsRune("aeiou", char) {
-			count += 1
-		}
-	}
-	return count >= 3
 }
 
 func main() {
-	file, err := os.Open("input.txt")
+	input, err := os.ReadFile("input.txt")
 	if err != nil {
-		fmt.Println("Error opening file:", file)
+		fmt.Println("Error reading file:", err)
 		return
 	}
 
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	naughtyStrings, niceStrings := 0, 0
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		fmt.Println(line)
-		fmt.Printf("\n ——— \n")
-
-		if hasForbiddenPair(line) {
-			naughtyStrings += 1
-			continue
+	nice := 0
+	for _, line := range strings.Split(strings.TrimSpace(string(input)), "\n") {
+		if isNice(line) {
+			nice++
 		}
-		if !hasDoubled(line) {
-			naughtyStrings += 1
-			continue
-		}
-		if !containsVowels(line) {
-			naughtyStrings += 1
-			continue
-		}
-		niceStrings += 1
 	}
 
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error scanning file:", err)
-	}
-
-	fmt.Printf("Part-1: Number of strings: %d\n", niceStrings)
+	fmt.Printf("Part-1: Number of nice strings: %d\n", nice)
 }
