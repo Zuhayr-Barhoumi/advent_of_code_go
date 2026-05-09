@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -48,7 +47,8 @@ func GetState(grid [][]Light, x, y int) int {
 	return -1
 }
 
-func LightsCount(grid [][]Light, size int) int {
+func countLit(grid [][]Light) int {
+	size := 1000
 	count := 0
 	for y := 0; y < size; y++ {
 		for x := 0; x < size; x++ {
@@ -67,61 +67,19 @@ func main() {
 		return
 	}
 
-	s := strings.Split(string(file), "\n")
-	// grid := NewGrid()
+	s := strings.Split(strings.TrimSpace(string(file)), "\n")
 
 	// Create a 1000x1000 grid
-	grid := make([][]Light, 1000) // 1000 rows
-	for i := range grid {
-		grid[i] = make([]Light, 1000)
+	grid1 := make([][]Light, 1000) // 1000 rows
+	for i := range grid1 {
+		grid1[i] = make([]Light, 1000)
 	}
-
-	for _, line := range s {
-		// if it's a toggle
-		if strings.HasPrefix(line, "toggle") {
-			words := strings.Split(line, " ")
-			starting := words[1]
-			ending := words[3]
-
-			stX, stY := strings.Split(starting, ",")[0], strings.Split(starting, ",")[1]
-			endX, endY := strings.Split(ending, ",")[0], strings.Split(ending, ",")[1]
-
-			// Convert coords to ints
-			startingX, _ := strconv.Atoi(stX)
-			startingY, _ := strconv.Atoi(stY)
-			endingX, _ := strconv.Atoi(endX)
-			endingY, _ := strconv.Atoi(endY)
-
-			toggleLights(grid, startingX, startingY, endingX, endingY)
-		}
-
-		// if it's "turn" instruction
-		if strings.HasPrefix(line, "turn") {
-			words := strings.Split(line, " ")
-			starting := words[2]
-			ending := words[4]
-
-			stX, stY := strings.Split(starting, ",")[0], strings.Split(starting, ",")[1]
-			endX, endY := strings.Split(ending, ",")[0], strings.Split(ending, ",")[1]
-
-			// Convert coords to ints
-			startingX, _ := strconv.Atoi(stX)
-			startingY, _ := strconv.Atoi(stY)
-			endingX, _ := strconv.Atoi(endX)
-			endingY, _ := strconv.Atoi(endY)
-
-			// Turn lights on
-			if words[1] == "on" {
-				turnLights(grid, startingX, startingY, endingX, endingY, 1)
-			}
-
-			// Turn lights off
-			if words[1] == "off" {
-				turnLights(grid, startingX, startingY, endingX, endingY, 0)
-			}
-		}
+	grid2 := make([][]Light, 1000) // 1000 rows
+	for i := range grid2 {
+		grid2[i] = make([]Light, 1000)
 	}
 
 	// 400410
-	fmt.Printf("Part-1: Number of lights that are lit: %d\n", LightsCount(grid, 1000))
+	fmt.Printf("Part-1: Number of lights that are lit: %d\n", part1(grid1, s))
+	fmt.Printf("Part-2: Total brightness level: %d\n", part2(grid2, s))
 }
