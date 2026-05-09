@@ -70,24 +70,13 @@ func main() {
 	s := strings.Split(string(file), "\n")
 	// grid := NewGrid()
 
-	// Create a 1000x1000 grid filled with zeros
+	// Create a 1000x1000 grid
 	grid := make([][]Light, 1000) // 1000 rows
-	for y := 0; y < 1000; y++ {
-		grid[y] = make([]Light, 1000)
-		for x := 0; x < 1000; x++ {
-			grid[y][x] = Light{
-				X:     x,
-				Y:     y,
-				State: 0,
-			}
-		}
+	for i := range grid {
+		grid[i] = make([]Light, 1000)
 	}
 
 	for _, line := range s {
-		if line == "" {
-			fmt.Println("Empty file")
-			continue
-		}
 		// if it's a toggle
 		if strings.HasPrefix(line, "toggle") {
 			words := strings.Split(line, " ")
@@ -133,5 +122,6 @@ func main() {
 		}
 	}
 
+	// 400410
 	fmt.Printf("Part-1: Number of lights that are lit: %d\n", LightsCount(grid, 1000))
 }
