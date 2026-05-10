@@ -7,6 +7,17 @@ import (
 	"strings"
 )
 
+func buildWires(lines []string) map[string]string {
+	wires := make(map[string]string)
+	for _, line := range lines {
+		parts := strings.Split(line, " -> ")
+		wire := parts[1]
+		instruction := parts[0]
+		wires[wire] = instruction
+	}
+	return wires
+}
+
 func main() {
 	file, err := os.ReadFile("input.txt")
 	if err != nil {
@@ -16,17 +27,18 @@ func main() {
 
 	lines := strings.Split(strings.TrimSpace((string(file))), "\n")
 
-	wires := make(map[string]string)
-	cache := make(map[string]int)
+	wires := buildWires(lines)
 
-	for _, line := range lines {
-		parts := strings.Split(line, " -> ")
-		wire := parts[1]
-		instruction := parts[0]
-		wires[wire] = instruction
-	}
+	part1 := evaluate("a", wires, make(map[string]int))
+	fmt.Println("Part 1:", part1)
 
-	fmt.Println("Part 1:", evaluate("a", wires, cache))
+	wires = buildWires(lines)
+
+	wires["b"] = strconv.Itoa(part1)
+
+	part2 := evaluate("a", wires, make(map[string]int))
+
+	fmt.Println("Part 2:", part2)
 
 }
 
