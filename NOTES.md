@@ -19,3 +19,8 @@
 - [][]bool is clean for on/off grids but [][]int (or a struct with State int) is more flexible when part 2 changes the rules
 - max(value, 0) is the clean way to clamp to a minimum in Go 1.21+
 - Keep grids separate per part — passing a modified grid to part 2 is a subtle bug that's easy to miss
+
+### Day 7:
+
+- Recursive evaluation with a cache map (memoization) is the clean solution when dependencies are **unordered**
+- Memoization Pattern: Check the cache first, then handle base cases, then recurse
