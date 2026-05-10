@@ -39,7 +39,6 @@ func main() {
 	part2 := evaluate("a", wires, make(map[string]int))
 
 	fmt.Println("Part 2:", part2)
-
 }
 
 func evaluate(wire string, wires map[string]string, cache map[string]int) int {
