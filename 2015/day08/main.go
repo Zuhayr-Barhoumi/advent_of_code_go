@@ -31,6 +31,10 @@ func countMemChars(line string) int {
 	return count
 }
 
+func countCodeChars(line string) int {
+	return len(line)
+}
+
 func main() {
 	file, err := os.ReadFile("input.txt")
 	if err != nil {
