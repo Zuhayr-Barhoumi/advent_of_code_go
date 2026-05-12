@@ -4,15 +4,7 @@ import (
 	"math"
 )
 
-func part1(lines []string) int {
-	// find all unique routes in the input lines
-	uniqueRoutes := findUniqueRoutes(lines)
-
-	// map every 2 destinations to one distance
-	routes := mapDistToRoute(lines, uniqueRoutes)
-
-	// all unqiue permutations
-	perms := permutations(uniqueRoutes)
+func part1(routes map[[2]string]int, perms [][]string) int {
 
 	minDist := math.MaxInt
 

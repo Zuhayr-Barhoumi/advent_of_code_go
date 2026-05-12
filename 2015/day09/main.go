@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func mapDistToRoute(lines []string, uniqueRoutes []string) map[[2]string]int {
+func mapRouteToDistance(lines []string) map[[2]string]int {
 	routes := make(map[[2]string]int)
 
 	// Store routes
@@ -88,6 +88,15 @@ func main() {
 
 	lines := strings.Split(strings.TrimSpace((string(file))), "\n")
 
-	fmt.Println("Part-1:", part1(lines))
-	fmt.Println("Part-1:", part2(lines))
+	// find all unique routes in the input lines
+	uniqueRoutes := findUniqueRoutes(lines)
+
+	// map every 2 locations to one distance
+	routes := mapRouteToDistance(lines)
+
+	// all unqiue permutations
+	perms := permutations(uniqueRoutes)
+
+	fmt.Println("Part-1:", part1(routes, perms))
+	fmt.Println("Part-2:", part2(routes, perms))
 }
