@@ -1,22 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"math"
+	"slices"
 	"strconv"
 	"strings"
 )
 
-func contains(slice []string, value string) bool {
-	for _, item := range slice {
-		if item == value {
-			return true
-		}
+func routeDistance(perm []string, routes map[[2]string]int) int {
+	total := 0
+
+	for i := 0; i < len(perm)-1; i++ {
+		total += routes[[2]string{perm[i], perm[i+1]}]
 	}
-	return false
+	return total
 }
 
-func part1(lines []string) string {
-	// find all unique destitions in the input lines
+func part1(lines []string) int {
+	// find all unique destinations in the input lines
 	unique := []string{}
 
 	// map every 2 destinations to one distance
@@ -26,16 +27,13 @@ func part1(lines []string) string {
 		// Split by whitespace
 		words := strings.Fields(line)
 
-		if !contains(unique, words[0]) {
+		if !slices.Contains(unique, words[0]) {
 			unique = append(unique, words[0])
 		}
-		if !contains(unique, words[2]) {
+		if !slices.Contains(unique, words[2]) {
 			unique = append(unique, words[2])
 		}
-
 	}
-
-	fmt.Println("Unique destinations:", unique)
 
 	// Store routes
 	for _, line := range lines {
@@ -54,9 +52,18 @@ func part1(lines []string) string {
 		}
 
 		routes[[2]string{dest1, dest2}] = distance
+		routes[[2]string{dest2, dest1}] = distance
 	}
-	for k, w := range routes {
-		fmt.Println("Routes:", k, w)
+
+	perms := permutations(unique)
+	minDist := math.MaxInt
+
+	for _, perm := range perms {
+		distance := routeDistance(perm, routes)
+		if distance < minDist {
+			minDist = distance
+		}
 	}
-	return "-1" + lines[0]
+
+	return minDist
 }
