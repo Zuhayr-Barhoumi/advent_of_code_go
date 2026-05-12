@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-func part1(lines []string) int {
+func part2(lines []string) int {
 	// find all unique routes in the input lines
 	uniqueRoutes := findUniqueRoutes(lines)
 
