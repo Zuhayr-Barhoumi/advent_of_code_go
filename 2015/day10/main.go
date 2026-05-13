@@ -34,9 +34,8 @@ func main() {
 
 	fmt.Printf("Part 1: %d\n", len(input))
 
-	input = "3113322113"
-
-	for i := 0; i < 50; i++ {
+	// Just run it 10 more iterations
+	for i := 0; i < 10; i++ {
 		input = lookAndSay(input)
 	}
 
