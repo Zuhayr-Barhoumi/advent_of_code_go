@@ -2,23 +2,6 @@ package main
 
 import "fmt"
 
-func main() {
-	/*
-		RULES:
-			- Include >= 3 letters increasing (tripples: "abc", "bcd",... "xyz")
-			- Not contain i, o or l
-			- Include >= 2 different pairs non-overlapping (example: "aa", "bb", "zz")
-	*/
-
-	input := "cqjxjnds"
-	nextPassword := getNextValid(input)
-	fmt.Println("Part-1:", nextPassword)
-
-	nextPassword = getNextValid(nextPassword)
-	fmt.Println("Part-2:", nextPassword)
-
-}
-
 func getNextValid(input string) string {
 	pwd := []byte(input)
 
@@ -93,4 +76,21 @@ func ruleThreeCheck(pwd []byte) bool {
 
 	}
 	return count >= 2
+}
+
+func main() {
+	/*
+		RULES:
+			- Include >= 3 letters increasing (tripples: "abc", "bcd",... "xyz")
+			- Not contain i, o or l
+			- Include >= 2 different pairs non-overlapping (example: "aa", "bb", "zz")
+	*/
+
+	input := "cqjxjnds"
+	nextPassword := getNextValid(input)
+	fmt.Println("Part-1:", nextPassword)
+
+	nextPassword = getNextValid(nextPassword)
+	fmt.Println("Part-2:", nextPassword)
+
 }
