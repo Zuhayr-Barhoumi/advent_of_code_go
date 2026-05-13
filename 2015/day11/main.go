@@ -12,7 +12,10 @@ func main() {
 
 	input := "cqjxjnds"
 	nextPassword := getNextValid(input)
-	fmt.Println(nextPassword)
+	fmt.Println("Part-1:", nextPassword)
+
+	nextPassword = getNextValid(nextPassword)
+	fmt.Println("Part-2:", nextPassword)
 
 }
 
