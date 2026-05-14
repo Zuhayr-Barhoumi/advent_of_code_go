@@ -75,8 +75,29 @@ func permutations(uniqueVisitors []string) [][]string {
 	return result
 }
 
-func solve(lines []string) int {
+func solve1(lines []string) int {
 	uniqueVisitors := getUnique(lines)
+
+	happinessValues := getHappinessValuesMap(lines)
+
+	perms := permutations(uniqueVisitors)
+
+	maxChange := math.MinInt
+
+	for _, perm := range perms {
+		change := happinessChange(perm, happinessValues)
+		if change > maxChange {
+			maxChange = change
+		}
+	}
+
+	return maxChange
+}
+
+func solve2(lines []string) int {
+	uniqueVisitors := getUnique(lines)
+
+	uniqueVisitors = append(uniqueVisitors, "ME")
 
 	happinessValues := getHappinessValuesMap(lines)
 
@@ -103,5 +124,6 @@ func main() {
 
 	lines := strings.Split(strings.TrimSpace(string(file)), "\n")
 
-	fmt.Println("Part 1- Optimal Total Change in Happiness:", solve(lines))
+	fmt.Println("Part 1- Optimal Total Change in Happiness:", solve1(lines))
+	fmt.Println("Part 2- Optimal Total Change in Happiness:", solve2(lines))
 }
