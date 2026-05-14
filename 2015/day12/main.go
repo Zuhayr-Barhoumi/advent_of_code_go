@@ -13,7 +13,13 @@ func getSum(data interface{}) int {
 	case map[string]interface{}:
 		sum := 0
 		for _, value := range v {
-			sum += getSum(value)
+			// Part2 conditional
+			if value == "red" {
+				sum = 0
+				break
+			} else {
+				sum += getSum(value)
+			}
 		}
 		return sum
 	case []interface{}:
