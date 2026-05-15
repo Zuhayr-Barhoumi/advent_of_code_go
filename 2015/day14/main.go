@@ -14,23 +14,35 @@ type Reindeer struct {
 	speed, flightDuration, restDuration int
 }
 
-func calcDistance(r Reindeer) int {
-	completeCycles := TIME / (r.flightDuration + r.restDuration)
-	leftOverTime := TIME % (r.flightDuration + r.restDuration)
-
-	distance := (completeCycles * r.flightDuration * r.speed) + (min(leftOverTime, r.flightDuration) * r.speed)
-
-	return distance
+func calcScores(reindeers []Reindeer) []int {
+	scores := make([]int, len(reindeers))
+	for i := 1; i <= TIME; i++ {
+		leadDistance := 0
+		for _, reindeer := range reindeers {
+			distance := calcDistance(reindeer, i)
+			if distance > leadDistance {
+				leadDistance = distance
+			}
+		}
+		for j, reindeer := range reindeers {
+			distance := calcDistance(reindeer, i)
+			if distance == leadDistance {
+				scores[j]++
+			}
+		}
+	}
+	return scores
 }
 
-func getDistancesMap(reindeers []Reindeer) map[Reindeer]int {
-	reinDistance := make(map[Reindeer]int)
+func calcDistance(r Reindeer, time int) int {
+	completeCycles := time / (r.flightDuration + r.restDuration)
 
-	for _, r := range reindeers {
-		distance := calcDistance(r)
-		reinDistance[r] = distance
-	}
-	return reinDistance
+	leftOverTime := time % (r.flightDuration + r.restDuration)
+
+	// Distance from complete cycles
+	distance := completeCycles*r.flightDuration*r.speed + (min(leftOverTime, r.flightDuration) * r.speed)
+
+	return distance
 }
 
 func getReindeers(lines []string) []Reindeer {
@@ -57,16 +69,29 @@ func getReindeers(lines []string) []Reindeer {
 
 func solve1(lines []string) int {
 	reindeers := getReindeers(lines)
-	distancesMap := getDistancesMap(reindeers)
-	winningDeerDistance := 0
 
-	for i := 0; i < len(distancesMap); i++ {
-		// fmt.Printf("%v %v\n", reindeers[i], distancesMap[reindeers[i]])
-		if distancesMap[reindeers[i]] > winningDeerDistance {
-			winningDeerDistance = distancesMap[reindeers[i]]
+	winningDistance := 0
+	for _, r := range reindeers {
+		distance := calcDistance(r, TIME)
+		if distance > winningDistance {
+			winningDistance = distance
 		}
 	}
-	return winningDeerDistance
+
+	return winningDistance
+}
+
+func solve2(lines []string) int {
+	reindeers := getReindeers(lines)
+	scores := calcScores(reindeers)
+
+	winningScore := 0
+	for _, score := range scores {
+		if score > winningScore {
+			winningScore = score
+		}
+	}
+	return winningScore
 }
 
 func main() {
@@ -78,4 +103,5 @@ func main() {
 	lines := strings.Split(strings.TrimSpace(string(file)), "\n")
 
 	fmt.Println("Part-1:", solve1(lines))
+	fmt.Println("Part-2:", solve2(lines))
 }
