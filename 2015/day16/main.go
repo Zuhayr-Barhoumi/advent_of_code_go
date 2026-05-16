@@ -68,6 +68,42 @@ func solve1(lines []string) int {
 	return -1
 }
 
+func solve2(lines []string) int {
+	sues := getAunts(lines)
+	for i, sue := range sues {
+		match := true
+		for prop, val := range sue {
+			switch prop {
+			case "cats":
+				if val <= tickerTape[prop] {
+					match = false
+				}
+			case "trees":
+				if val <= tickerTape[prop] {
+					match = false
+				}
+			case "pomeranians":
+				if val >= tickerTape[prop] {
+					match = false
+				}
+			case "goldfish":
+				if val >= tickerTape[prop] {
+					match = false
+				}
+			default:
+				if val != tickerTape[prop] {
+					match = false
+				}
+			}
+
+		}
+		if match {
+			return i + 1
+		}
+	}
+	return -1
+}
+
 func main() {
 	file, err := os.ReadFile("input.txt")
 	if err != nil {
@@ -77,4 +113,5 @@ func main() {
 	lines := strings.Split(strings.TrimSpace(string(file)), "\n")
 
 	fmt.Println("Part-1 — Aunt Sue Number:", solve1(lines))
+	fmt.Println("Part-2 — Aunt Sue Real Number:", solve2(lines))
 }
