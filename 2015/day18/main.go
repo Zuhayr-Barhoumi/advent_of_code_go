@@ -6,7 +6,26 @@ import (
 	"strings"
 )
 
+type Light struct {
+	X, Y int
+	S    string
+}
+
 func solve1(lines []string) int {
+	grid := make([][]Light, 100)
+
+	// Init grid
+	for i := range grid {
+		grid[i] = make([]Light, 100)
+	}
+
+	// Fill grid with input
+	for i, line := range lines {
+		for j, r := range line {
+			grid[i][j] = Light{X: i, Y: j, S: string(r)}
+		}
+	}
+
 	return -1
 }
 
