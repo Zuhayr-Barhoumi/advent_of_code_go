@@ -27,12 +27,12 @@ func nextState(currentState string, neighborsOn int) string {
 
 func countNeighborsOn(grid [][]Cell, x, y int) int {
 	count := 0
-	for ix := -1; ix <= 1; ix++ {
-		for iy := -1; iy <= 1; iy++ {
-			if ix == 0 && iy == 0 {
+	for dx := -1; dx <= 1; dx++ {
+		for dy := -1; dy <= 1; dy++ {
+			if dx == 0 && dy == 0 {
 				continue
 			}
-			neighborX, neighborY := x+ix, y+iy
+			neighborX, neighborY := x+dx, y+dy
 			if getState(grid, neighborX, neighborY, 100) == "#" {
 				count++
 			}
@@ -60,7 +60,7 @@ func getState(grid [][]Cell, x, y, size int) string {
 	return "."
 }
 
-func simulate(grid [][]Cell, nSteps, size int) int {
+func simulate(grid [][]Cell, nSteps, size int, stuckCorners bool) int {
 	for step := 0; step < nSteps; step++ {
 		nextGrid := make([][]Cell, size)
 		for i := range nextGrid {
@@ -79,6 +79,12 @@ func simulate(grid [][]Cell, nSteps, size int) int {
 			}
 		}
 		grid = nextGrid
+		if stuckCorners {
+			grid[0][0].S = "#"
+			grid[0][size-1].S = "#"
+			grid[size-1][0].S = "#"
+			grid[size-1][size-1].S = "#"
+		}
 	}
 
 	return countOn(grid, size)
@@ -100,7 +106,31 @@ func solve1(lines []string) int {
 		}
 	}
 
-	return simulate(grid, 100, 100)
+	return simulate(grid, 100, 100, false)
+}
+
+func solve2(lines []string) int {
+	size := 100
+	grid := make([][]Cell, size)
+
+	// Init grid
+	for i := range grid {
+		grid[i] = make([]Cell, size)
+	}
+
+	// Fill grid with input
+	for i, line := range lines {
+		for j, r := range line {
+			grid[i][j] = Cell{X: j, Y: i, S: string(r)}
+		}
+	}
+
+	grid[0][0].S = "#"
+	grid[0][size-1].S = "#"
+	grid[size-1][0].S = "#"
+	grid[size-1][size-1].S = "#"
+
+	return simulate(grid, 100, size, true)
 }
 
 func main() {
@@ -124,4 +154,5 @@ func main() {
 	lines := strings.Split(strings.TrimSpace(string(file)), "\n")
 
 	fmt.Println("Part-1 — Number of on lights after 100 steps:", solve1(lines))
+	fmt.Println("Part-2 — Number of on lights after 100 steps (stuck corner lights):", solve2(lines))
 }
