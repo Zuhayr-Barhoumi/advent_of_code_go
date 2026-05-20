@@ -24,6 +24,10 @@ func main() {
 	distance := 0
 	direction := "north"
 	street := Street{}
+	streets := []Street{}
+	lastRec := Street{0, 0}
+	found := false
+	visited := Street{0, 0}
 
 	for _, current := range instructions {
 		digits := strings.TrimLeft(current, "RL")
@@ -31,6 +35,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		if rune(current[0]) == 'R' {
 			switch direction {
 			case "north":
@@ -47,8 +52,7 @@ func main() {
 				street.Y += blocks
 			}
 
-		}
-		if rune(current[0]) == 'L' {
+		} else {
 			switch direction {
 			case "north":
 				direction = "west"
@@ -62,12 +66,87 @@ func main() {
 			case "east":
 				direction = "north"
 				street.Y += blocks
-
 			}
 
 		}
+
+		if !found {
+			visited = recordVisited(blocks, lastRec, direction, &streets, &found)
+		}
+		lastRec = street
 	}
 
 	distance = int(math.Abs(float64(street.X)) + math.Abs(float64(street.Y)))
+	firstRevisit := int(math.Abs(float64(visited.X))) + int(math.Abs(float64(visited.Y)))
 	fmt.Println("Part-1 — Number of blocks away:", distance)
+	fmt.Println("Part-2 — Distance to first location visisted twice:", firstRevisit)
+}
+
+func recordVisited(blocks int, lastRec Street, direction string, streets *[]Street, found *bool) Street {
+	currentX := lastRec.X
+	currentY := lastRec.Y
+	visited := Street{0, 0}
+	switch direction {
+	case "north":
+		for i := 1; i <= blocks; i++ {
+			currentY += 1
+			street := Street{lastRec.X, currentY}
+			if !*found {
+				if wasVisited(street, *streets) {
+					visited = street
+					*found = true
+				}
+			}
+			*streets = append(*streets, street)
+		}
+	case "east":
+		for i := 1; i <= blocks; i++ {
+			currentX += 1
+			street := Street{currentX, lastRec.Y}
+			if !*found {
+				if wasVisited(street, *streets) {
+					visited = street
+					*found = true
+				}
+			}
+
+			*streets = append(*streets, street)
+		}
+	case "south":
+		for i := 1; i <= blocks; i++ {
+			currentY -= 1
+			street := Street{lastRec.X, currentY}
+			if !*found {
+				if wasVisited(street, *streets) {
+					visited = street
+					*found = true
+				}
+			}
+
+			*streets = append(*streets, street)
+		}
+	case "west":
+		for i := 1; i <= blocks; i++ {
+			currentX -= 1
+			street := Street{currentX, lastRec.Y}
+			if !*found {
+				if wasVisited(street, *streets) {
+					visited = street
+					*found = true
+				}
+			}
+
+			*streets = append(*streets, street)
+		}
+	}
+	return visited
+}
+
+func wasVisited(s Street, recorded []Street) bool {
+	for _, r := range recorded {
+		if r == s {
+			return true
+		}
+	}
+	return false
 }
