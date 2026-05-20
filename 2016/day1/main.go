@@ -92,8 +92,7 @@ func recordVisited(blocks int, lastRec Street, direction string, streets map[Str
 			currentY += 1
 			street := Street{lastRec.X, currentY}
 			if !*found {
-				_, ok := streets[street]
-				if ok {
+				if streets[street] {
 					visited = street
 					*found = true
 				}
@@ -105,8 +104,7 @@ func recordVisited(blocks int, lastRec Street, direction string, streets map[Str
 			currentX += 1
 			street := Street{currentX, lastRec.Y}
 			if !*found {
-				_, ok := streets[street]
-				if ok {
+				if streets[street] {
 					visited = street
 					*found = true
 				}
@@ -119,8 +117,7 @@ func recordVisited(blocks int, lastRec Street, direction string, streets map[Str
 			currentY -= 1
 			street := Street{lastRec.X, currentY}
 			if !*found {
-				_, ok := streets[street]
-				if ok {
+				if streets[street] {
 					visited = street
 					*found = true
 				}
@@ -133,8 +130,7 @@ func recordVisited(blocks int, lastRec Street, direction string, streets map[Str
 			currentX -= 1
 			street := Street{currentX, lastRec.Y}
 			if !*found {
-				_, ok := streets[street]
-				if ok {
+				if streets[street] {
 					visited = street
 					*found = true
 				}
