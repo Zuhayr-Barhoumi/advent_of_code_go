@@ -22,7 +22,7 @@ func main() {
 
 	instructions := strings.Split(strings.TrimSpace(string(file)), ", ")
 	distance := 0
-	direction := ""
+	direction := "north"
 	street := Street{}
 
 	for _, current := range instructions {
@@ -45,9 +45,6 @@ func main() {
 			case "west":
 				direction = "north"
 				street.Y += blocks
-			default:
-				direction = "east"
-				street.X += blocks
 			}
 
 		}
@@ -65,9 +62,6 @@ func main() {
 			case "east":
 				direction = "north"
 				street.Y += blocks
-			default:
-				direction = "west"
-				street.X -= blocks
 
 			}
 
