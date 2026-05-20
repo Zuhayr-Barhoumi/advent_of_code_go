@@ -24,7 +24,7 @@ func main() {
 	distance := 0
 	direction := "north"
 	street := Street{}
-	streets := []Street{}
+	streets := map[Street]bool{}
 	lastRec := Street{0, 0}
 	found := false
 	visited := Street{0, 0}
@@ -71,7 +71,7 @@ func main() {
 		}
 
 		if !found {
-			visited = recordVisited(blocks, lastRec, direction, &streets, &found)
+			visited = recordVisited(blocks, lastRec, direction, streets, &found)
 		}
 		lastRec = street
 	}
@@ -82,7 +82,7 @@ func main() {
 	fmt.Println("Part-2 — Distance to first location visisted twice:", firstRevisit)
 }
 
-func recordVisited(blocks int, lastRec Street, direction string, streets *[]Street, found *bool) Street {
+func recordVisited(blocks int, lastRec Street, direction string, streets map[Street]bool, found *bool) Street {
 	currentX := lastRec.X
 	currentY := lastRec.Y
 	visited := Street{0, 0}
@@ -92,61 +92,56 @@ func recordVisited(blocks int, lastRec Street, direction string, streets *[]Stre
 			currentY += 1
 			street := Street{lastRec.X, currentY}
 			if !*found {
-				if wasVisited(street, *streets) {
+				_, ok := streets[street]
+				if ok {
 					visited = street
 					*found = true
 				}
 			}
-			*streets = append(*streets, street)
+			streets[street] = true
 		}
 	case "east":
 		for i := 1; i <= blocks; i++ {
 			currentX += 1
 			street := Street{currentX, lastRec.Y}
 			if !*found {
-				if wasVisited(street, *streets) {
+				_, ok := streets[street]
+				if ok {
 					visited = street
 					*found = true
 				}
 			}
 
-			*streets = append(*streets, street)
+			streets[street] = true
 		}
 	case "south":
 		for i := 1; i <= blocks; i++ {
 			currentY -= 1
 			street := Street{lastRec.X, currentY}
 			if !*found {
-				if wasVisited(street, *streets) {
+				_, ok := streets[street]
+				if ok {
 					visited = street
 					*found = true
 				}
 			}
 
-			*streets = append(*streets, street)
+			streets[street] = true
 		}
 	case "west":
 		for i := 1; i <= blocks; i++ {
 			currentX -= 1
 			street := Street{currentX, lastRec.Y}
 			if !*found {
-				if wasVisited(street, *streets) {
+				_, ok := streets[street]
+				if ok {
 					visited = street
 					*found = true
 				}
 			}
 
-			*streets = append(*streets, street)
+			streets[street] = true
 		}
 	}
 	return visited
-}
-
-func wasVisited(s Street, recorded []Street) bool {
-	for _, r := range recorded {
-		if r == s {
-			return true
-		}
-	}
-	return false
 }
